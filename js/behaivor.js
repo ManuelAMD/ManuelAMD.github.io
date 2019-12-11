@@ -644,15 +644,6 @@ function init(){
 	formComment.addEventListener('submit',function(evento){evento.preventDefault();});
 	fl = new FuzzyLogic();
 	window.setTimeout(importPrettiffy(),1);
-	//Prueba de ocultación y agregación de elementos
-	/*var x = document.getElementById('ocul');
-	x.addEventListener("click",function(){oculta();});
-	var y = document.getElementById('mos');
-	y.addEventListener("click",function(){muestra();});
-	var z = document.getElementById('add');
-	z.addEventListener("click",function(){agrega();});
-	var h = document.getElementById('remove');
-	h.addEventListener("click",function(){quitaAgregado();});*/
 }
 
 init();
