@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Video</title>
+	<style>
+		#my_camera{
+		 width: 320px;
+		 height: 240px;
+		 border: 1px solid black;
+		}
+	</style>
+	<script src="js/jquery-3.4.1.min.js"></script>
+	<script src="js/webcam.min.js"></script>
+</head>
+<body>
+	<div id="my_camera"></div>
+	<input type=button value="Take Snapshot" onClick="take_snapshot()">
+
+	<div id="results" ></div>
+	<!-- Configure a few settings and attach camera -->
+	<script language="JavaScript">
+		width = 320
+		height = 240
+		Webcam.set({
+			width: width,
+			height: height,
+			image_format: 'jpeg',
+			jpeg_quality: 90
+		});
+		Webcam.attach( '#my_camera' );
+
+		<!-- Code to handle taking the snapshot and displaying it locally -->
+		function take_snapshot() {
+			var result;
+
+			// take snapshot and get image data
+			Webcam.snap( function(data_uri) {
+				var im;
+				console.log(data_uri)
+				//http://thelastimperial.com:8080/
+				//http://127.0.0.1:8080/
+				$.post('http://thelastimperial.com:8080/imgData',{data: data_uri, height: height, width: width}).done(function(data){
+					console.log('R: '+data)
+				}).fail(function(err){
+				console.log(err);
+				});
+			  // display results in page
+			document.getElementById('results').innerHTML = 
+				'<img src="'+data_uri+'"/>';
+			});
+		}
+	</script>
+</body>
+</html>

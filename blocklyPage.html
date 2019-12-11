@@ -8,54 +8,305 @@
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 	<link rel="stylesheet" type="text/css" href="css/mainstyles.css">
+	<link href="https://cdn.quilljs.com/1.0.0/quill.snow.css" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdn.quilljs.com/1.3.6/quill.core.css">
+	<script src="js/blockly_compressed.js"></script>
+	<script src="js/blocks_compressed.js"></script>
+	<!--<script src="js/bloquesPrueba.js"></script>-->
+	<script src="js/en.js"></script>
+	<script src="js/javascript_compressed.js"></script>
+	<script src="js/python_compressed.js"></script>
+	<script src="js/jquery-3.4.1.min.js"></script>
+	<script src="js/webcam.min.js"></script>
+	<script src="js/fuzzy-min.js"></script>
+	<script src="js/FuzzyLogic/sistema.js"></script>
+	<script src="js/FuzzyLogic/fuzzy.js"></script>
+	<script src="js/skulpt.min.js" type="text/javascript"></script> 
+	<script src="js/skulpt-stdlib.js" type="text/javascript"></script> 
+	<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
 </head>
 <body class="w3-black">
+	<!--<button id="ocul">Ocultar</button>
+	<button id="mos">Mostrar</button>
+	<button id="add">Añadir</button>
+	<button id="remove">Quitar</button>-->
 	<nav class="w3-sidebar w3-bar-block w3-small w3-hide-small w3-center">
 		<img src="img/LogoBlockly.png" style="width: 50%;">
 		<a href="index.html" class="w3-bar-item w3-button w3-padding-large w3-hover-black">
 			<i class="fa fa-home w3-xxlarge"></i>
 			<p>HOME</p>
 		</a>
-		<a href="#" class="w3-bar-item w3-button w3-padding-large w3-hover-black">
+		<a onclick="onProfile();" class="w3-bar-item w3-button w3-padding-large w3-hover-black">
 			<i class="fa fa-user w3-xxlarge"></i>
 			<p>PROFILE</p>
 		</a>
-		<a href="#" class="w3-bar-item w3-button w3-padding-large w3-hover-black">
+		<a onclick="onTask();" class="w3-bar-item w3-button w3-padding-large w3-hover-black">
 			<i class="fa fa-tasks w3-xxlarge"></i>
 			<p>TASK</p>
 		</a>
-		<a href="#" class="w3-bar-item w3-button w3-padding-large w3-hover-black">
+		<a onclick="onExam();" class="w3-bar-item w3-button w3-padding-large w3-hover-black" style="display: none;">
 			<i class="fa fa-mortar-board w3-xxlarge"></i>
 			<p>EXAM LEVEL</p>
 		</a>
-		<a href="#" class="w3-bar-item w3-button w3-padding-large w3-hover-black">
+		<a onclick="changeFree();" class="w3-bar-item w3-button w3-padding-large w3-hover-black">
 			<i class="fa fa-object-group w3-xxlarge"></i>
 			<p>FREE MODE</p>
 		</a>
+		<a onclick="document.getElementById('modalComment').style.display='block'" class="w3-bar-item w3-button w3-padding-large w3-hover-black">
+			<i class="fa fa-commenting-o w3-xxlarge"></i>
+			<p>COMMENTS</p>
+		</a>
+		<a id="out" class="w3-bar-item w3-button w3-padding-large w3-hover-black" style="display: none;" onclick="logOut();">
+			<i class="fa fa-user-times w3-xxlarge"></i>
+			<p>LOGOUT</p>
+		</a>
 	</nav>
 
-	<div class="w3-padding-large" id="main">
-		<header class="w3-container w3-padding-16 w3-center w3-black">
-			<h1 class="w3-jumbo"><span class="w3-hide-small">BPy</span></h1>
-			<img src="img/PythonLogo.png" alt="boy" class="w3-image" width="100" height="100" style="margin: 40px;">
-			<img src="img/LogoBlockly.png" alt="boy" class="w3-image" width="100" height="100" style="margin: 40px;">
-			<img src="img/js.png" alt="boy" class="w3-image" width="100" height="100" style="margin: 40px;">
-		</header>
-
-		<div class="w3-content w3-justify w3-text-grey w3-padding-16" id="prof">
-			<form action="/action_page.php" target="_blank">
-				<h2 class="w3-text-light-grey w3-padding-8">Username</h2>
-				<p><input class="w3-input w3-padding-16" type="text" placeholder="juanito24" required name="username"></p>
-				<h2 class="w3-text-light-grey w3-padding-8">Password</h2>
-				<p><input class="w3-input w3-padding-16" type="text" placeholder="xxxxxxxx" required name="password"></p>
-				<p>
-					<button class="w3-button w3-light-grey w3-padding-large" type="submit">
-						<i class="fa fa-user-circle-o"></i> LOGIN
-					</button>
-					<a id="register" href="" style="margin-left: 20px;" class="w3-hover-text-green">Register</a>
-				</p>
+	<div id="modalComment" class="w3-modal" style="z-index: 100;">
+		<div class="w3-modal-content w3-card-4">
+			<header class="w3-container w3-dark-grey">
+				<span onclick="document.getElementById('modalComment').style.display='none'" class="w3-button w3-display-topright">&times;</span>
+				<h2>Comments</h2>
+			</header>
+			<form onsubmit="sendComment();" class="w3-container">
+				<h4 class="w3-text-grey">Problem/Suggestion: </h4>
+				<input id="problem" class="w3-input w3-padding-16" type="text" name="problem" placeholder="No cargan los elementos" required style="width: 90%;">
+				<h4 class="w3-text-grey">Description: </h4>
+				<input id="descriptionProblem" class="w3-input w3-padding-16" type="textArea" name="descriptionProblem" placeholder="Al momento de cargar la página..." required style="width: 90%;">
+				<button class="w3-btn w3-dark-grey w3-margin" type="submit">Send</button>
+				<button class="w3-btn w3-dark-grey w3-margin" onclick="document.getElementById('modalComment').style.display='none'" type="reset">Cancel</button>
 			</form>
+			<footer class="w3-container w3-dark-grey">
+				<p>BPy productions</p>
+			</footer>
 		</div>
 	</div>
+
+	<div id="modalRegister" class="w3-modal">
+		<div class="w3-modal-content w3-card-4">
+			<header class="w3-container w3-dark-grey">
+				<span onclick="document.getElementById('modalRegister').style.display='none'" class="w3-button w3-display-topright">&times;</span>
+				<h2>Register module</h2>
+			</header>
+			<form onsubmit="registerUser();" class="w3-container">
+				<h4 class="w3-text-grey">Full name: </h4>
+				<input id="name" class="w3-input w3-padding-16" type="text" placeholder="Juan Alberto" required name="name" style="width: 90%">
+				<h4 class="w3-text-grey">Email: </h4>
+				<input id="emailReg" class="w3-input w3-padding-16" type="email" placeholder="ejemplo@company.com" name="email" style="width: 90%">
+				<!--<h4 class="w3-text-grey">Username: </h4>
+				<input class="w3-input w3-padding-16" type="text" name="user" placeholder="juanito24" required style="width: 90%" pattern="[^' ']+">-->
+				<h4 class="w3-text-grey">Password: </h4>
+				<input id="passReg" class="w3-input w3-padding-16" type="password" name="pass" placeholder="xxxxxxxx" required style="width: 90%">
+				<h4 class="w3-text-grey">Birthdate: </h4>
+				<input id="dateReg" type="date" class="w3-input w3-padding-160" name="date" required style="width: 90%;">
+				<button class="w3-btn w3-dark-grey w3-margin" type="submit">Register</button>
+				<button class="w3-btn w3-dark-grey w3-margin" onclick="document.getElementById('modalRegister').style.display='none'" type="reset">Cancel</button>
+			</form>
+			<footer class="w3-container w3-dark-grey">
+				<p>BPy productions</p>
+			</footer>
+		</div>
+	</div>
+
+	<div id="modalWin" class="w3-modal" style="z-index: 100;">
+		<div class="w3-modal-content w3-card-4">
+			<header class="w3-container w3-dark-grey">
+				<span onclick="document.getElementById('modalWin').style.display = 'none';" class="w3-button w3-display-topright">&times;</span>
+				<h2>GOOD JOB!!</h2>
+			</header>
+			<div id="modalStats" class="w3-container">
+				<table class="w3-table">
+					<tr class="w3-text-grey" ><th><h4>Time(S): </h4></th><th id="timeRes"></th></tr>
+					<tr class="w3-text-grey" ><th><h4>Helps: </h4></th><th id="helpRes"></th></tr>
+					<tr class="w3-text-grey" ><th><h4>Tries: </h4></th><th id="triesRes"></th></tr>
+					<tr class="w3-text-grey" ><th><h4>Level: </h4></th><th id="levelRes"></th></tr>
+				</table>
+				<!--<div class="w3-text-grey" id="timeRes"><h4>Time(S): </h4></div>
+				<div class="w3-text-grey" id="helpRes"><h4>Helps: </h4></div>
+				<div class="w3-text-grey" id="triesRes"><h4>Tries: </h4></div>
+				<div class="w3-text-grey" id="levelRes"><h4>Level: </h4></div>-->
+			</div>
+			<div id="winButtons" class="w3-container">
+				<button class="w3-btn w3-dark-grey w3-margin" onclick="document.getElementById('modalWin').style.display = 'none';">Aceptar</button>
+				<button class="w3-btn w3-dark-grey w3-margin" onclick="previousTask();">Anterior</button>
+				<button class="w3-btn w3-dark-grey w3-margin" onclick="nextTask();">Siguiente</button>
+				<button class="w3-btn w3-dark-grey w3-margin" onclick="document.getElementById('modalWin').style.display='none'; onTask();">Lista</button>
+			</div>
+			<footer class="w3-container w3-dark-grey">
+				<p>BPy productions</p>
+			</footer>
+		</div>
+	</div>
+
+	<div class="w3-padding-large" id="main">
+		<div id="login">
+			<header class="w3-container w3-padding-16 w3-center w3-black">
+				<h1 class="w3-jumbo"><span class="w3-hide-small">BPy</span></h1>
+				<img src="img/PythonLogo.png" alt="boy" class="w3-image" width="100" height="100" style="margin: 40px;">
+				<img src="img/LogoBlockly.png" alt="boy" class="w3-image" width="100" height="100" style="margin: 40px;">
+				<img src="img/js.png" alt="boy" class="w3-image" width="100" height="100" style="margin: 40px;">
+			</header>
+			<div class="w3-content w3-justify w3-text-grey w3-padding-16 w3-margin-right">
+				<form onsubmit="login();" id="logform">
+					<h2 class="w3-text-light-grey w3-padding-8">E-mail</h2>
+					<p><input id="formEmail" class="w3-input w3-padding-16" type="text" placeholder="example@company.com" required name="email" style=" width: 60%"></p>
+					<h2 class="w3-text-light-grey w3-padding-8">Password</h2>
+					<p><input id="formPassword" class="w3-input w3-padding-16" type="password" placeholder="xxxxxxxx" required name="password" style="width: 60%"></p>
+					<p>
+						<button class="w3-button w3-light-grey w3-padding-large" type="submit">
+							<i class="fa fa-user-circle-o"></i>LOGIN
+						</button>
+						<a id="register" style="margin-left: 40px;" class="w3-hover-text-green" onclick="document.getElementById('modalRegister').style.display='block'">Register</a>
+					</p>
+				</form>
+			</div>
+		</div>
+		<div id="profile" style="display: none;">
+			<header class="w3-container w3-padding-16 w3-center w3-black">
+				<h1 id="profname">Bienvenido </h1>
+				<img src="img/user.png" class="w3-margin w3-circle w3-card-4" alt="Person" style="width: 50%;">
+				<table id="tableInfo" class="w3-table-all w3-xxlarge">
+					<tr class="w3-dark-grey">
+						<th>Nivel</th>
+						<th>Problemas</th>
+						<th>Solucionados</th>
+					</tr>
+					<tr id="tableBasico" class="w3-grey w3-text-white">
+						<th>Básico</th>
+						<th id="basicValue">0</th>
+						<th id="basicSol">0</th>
+					</tr>
+					<tr id="tableMedio" class="w3-grey w3-text-white">
+						<th>Intermedio</th>
+						<th id="intermediateValue">0</th>
+						<th id="intermediateSol">0</th>
+					</tr>
+					<tr id="tableAvanzado" class="w3-grey w3-text-white">
+						<th>Avanzado</th>
+						<th id="advancedValue">0</th>
+						<th id="advancedSol">0</th>
+					</tr>
+				</table>
+			</header>
+		</div>
+		<!--Blockly task container-->
+		<div id="blocksContainer" class="w3-container" style="display: none;">
+			<header class="w3-container w3-padding-16 w3-center w3-black">
+				<table class="w3-table">
+					<tr>
+						<th><div id="time"><h2>Time(S): 0</h2></div></th>
+						<th><div id="help"><h2>Helps: 0</h2></div></th>
+						<th><div id="tries"><h2>Tries: 0</h2></div></th>
+					</tr>
+				</table>
+			</header>
+			<div id="problemTask"><h3>Problem: </h3></div>
+			<div id="helpTask"><h3>Help: </h3></div>
+			<div id="taksButtons" class="w3-bar" >
+				<button onclick="evalueStructure();" class="w3-margin w3-button w3-teal w3-right" style="width: 20%;height: 50px;font-weight: bold; font-size: 20px;">Evaluate</button>
+				<button onclick="executeCodeTask();" class="w3-margin w3-button w3-teal w3-right" style="width: 20%;height: 50px;font-weight: bold; font-size: 20px;">Run</button>
+				<button onclick="help();" class="w3-margin w3-button w3-teal w3-right" style="width: 20%;height: 50px;font-weight: bold; font-size: 20px;">Help</button>
+				<button onclick="eraseBlocksTask();" class="w3-margin w3-button w3-teal w3-right" style="width: 20%;height: 50px;font-weight: bold; font-size: 20px;">Erase</button>
+			</div>
+			<div id="task" >
+				<div id="blocklyTask"></div>
+				<div id="developTask">
+					<pre id="codeAreaTask" class="content prettyprint lang-py"></pre>
+					<div id="consoleAreaTask"></div>
+				</div>
+			</div>
+		</div>
+		<!--Task parts-->
+		<div id="taskContainer" style="display: none;">
+			<header class="w3-container w3-padding-16 w3-center w3-black">
+				<h1>Select a task</h1>
+			</header>
+			<div class="w3-panel w3-light-grey w3-round-xlarge" >
+				<ul id="ulTask" class="w3-ul">
+				</ul>
+			</div>
+		</div>
+
+		<div id="container" style="display: none;">
+			<div id="freeButtons" class="w3-bar" >
+				<button onclick="eraseBlocks();" class="w3-margin w3-button w3-teal w3-right" style="width: 20%;height: 50px;font-weight: bold; font-size: 20px;">Erase</button>
+				<button onclick="executeCodeFree();" class="w3-margin w3-button w3-teal w3-right" style="width: 20%;height: 50px;font-weight: bold; font-size: 20px;">Run</button>
+			</div>
+			<div id="free" >
+				<div id="blocklyFree"></div>
+				<div id="developFree">
+					<pre id="codeAreaFree" class="content prettyprint lang-py"></pre>
+					<div id="consoleAreaFree"></div>
+				</div>
+			</div>
+			<div class="w3-content w3-justify w3-text-grey w3-padding-64" id="instructions">
+				<h2 class="w3-text-light-grey">Instructions</h2>
+				<hr style="width: 200px;" class="w3-opacity">
+				<ol>
+					<li><p>This application is composed by a set of different parts: blockly interface, code interface and execution interface.</p></li>
+					<li><p>The blockly interface is made by two parts the toolbox, that have all the possible tool that can be use to implement a program, and the workspace, place that is used to build a program structure.</p></li>
+					<li><p>The code interface is a screen on the top-right-side that shows the code generated by the blocks on the workspace in the Python language.</p></li>
+					<li><p>The execution interface is a screen on the bottom-right-side that shows the result of the execution of the python code.</p></li>
+					<li><p>You can erase all blocks in the workspace if you click on the Erase button.</p></li>
+					<li><p>To use the blockly interface is necesary to click the wish category tag in the toolbox on the blockly interface, then a set of different blocks are presented, you just need to drag an element to the workspace and it will store the block there.</p></li>
+					<li><p>Each block will generate different code, depending on the block type, in python language.</p></li>
+					<li><p>To execute a generated code you can press the run button to execute the python code, the result of this operation will be shown on the execution interface.</p></li>
+				</ol>
+			</div>
+		</div>
+	</div>
+	<!--Píe de página-->
+	<footer class="w3-content w3-padding-64 w3-text-grey w3-xlarge">
+		<i class="fa fa-facebook-official w3-hover-opacity"></i>
+		<i class="fa fa-instagram w3-hover-opacity"></i>
+		<i class="fa fa-snapchat w3-hover-opacity"></i>
+		<i class="fa fa-pinterest-p w3-hover-opacity"></i>
+		<i class="fa fa-twitter w3-hover-opacity"></i>
+		<i class="fa fa-linkedin w3-hover-opacity"></i>
+		<p class="w3-medium">BPy Productions</p>
+	</footer>
+
+	<xml id="toolbox" style="display: none">
+		<category name="Blockly" categorystyle="logic_category">
+			<!--<block type="controls_if"></block>-->
+			<block type="controls_repeat_ext"></block>
+			<block type="logic_compare"></block>
+			<block type="math_number">
+				<field name="NUM">123</field>
+			</block>
+			<block type="math_arithmetic"></block>
+			<block type="text"></block>
+			<block type="text_print"></block>
+		</category>
+		<category name="variables" colour="%{BKY_VARIABLES_HUE}" custom="VARIABLE"></category>
+	</xml>
+	<!-- The core Firebase JS SDK is always required and must be listed first -->
+	<script src="https://www.gstatic.com/firebasejs/6.2.0/firebase-app.js"></script>
+
+	<!-- TODO: Add SDKs for Firebase products that you want to use
+	     https://firebase.google.com/docs/web/setup#available-libraries -->
+	<script src="https://www.gstatic.com/firebasejs/6.2.0/firebase-auth.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/6.2.0/firebase-firestore.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/6.2.0/firebase-storage.js"></script>
+	<script>
+		//const firebase = require("firebase");
+		//require("firebase/firestore");
+	  // Your web app's Firebase configuration
+	  var firebaseConfig = {
+	    apiKey: "AIzaSyCFKfcL2YDnftkaygsN9-bljUzPtdDDXu4",
+	    authDomain: "bpyia-fc64a.firebaseapp.com",
+	    databaseURL: "https://bpyia-fc64a.firebaseio.com",
+	    projectId: "bpyia-fc64a",
+	    storageBucket: "bpyia-fc64a.appspot.com",
+	    messagingSenderId: "45088818013",
+	    appId: "1:45088818013:web:db0529eaa4cb32f7959eb4"
+	  };
+	  // Initialize Firebase
+	  firebase.initializeApp(firebaseConfig);
+
+	  var db = firebase.firestore();
+	  console.log(db);
+	</script>
+	<script src="js/behaivor.js" type="text/javascript"></script>
 </body>
 </html>

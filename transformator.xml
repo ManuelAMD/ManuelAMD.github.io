@@ -1,0 +1,1 @@
+<xml id="toolbox" style="display: none"><category name="Advanced" categorystyle="logic_category"><block type="text_print"></block><block type="math_number"></block></category><category name="Lists"><block type="lists_create_with"></block></category><category name="variables" colour="%{BKY_VARIABLES_HUE}" custom="VARIABLE"></category></xml>

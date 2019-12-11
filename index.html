@@ -31,11 +31,35 @@
 			<i class="fa fa-envelope w3-xxlarge"></i>
 			<p>CONTACT</p>
 		</a>
-		<a href="blocklyPage.html" class="w3-bar-item w3-button w3-paddin-large w3-hover-black">
+		<a href="blocklyPage.html" class="w3-bar-item w3-button w3-paddin-large w3-hover-black" onclick="logOut();">
 			<i class="fa fa-qrcode w3-xxlarge"></i>
 			<p>BLOCKLY</p>
 		</a>
+		<a onclick="document.getElementById('modalComment').style.display='block'" class="w3-bar-item w3-button w3-padding-large w3-hover-black">
+			<i class="fa fa-commenting-o w3-xxlarge"></i>
+			<p>COMMENTS</p>
+		</a>
 	</nav>
+
+	<div id="modalComment" class="w3-modal" style="z-index: 100;">
+		<div class="w3-modal-content w3-card-4">
+			<header class="w3-conatiner w3-dark-grey">
+				<span onclick="document.getElementById('modalComment').style.display='none'" class="w3-button w3-display-topright">&times;</span>
+				<h2>Comments</h2>
+			</header>
+			<form onsubmit="sendComment();" class="w3-container">
+				<h4 class="w3-text-grey">Problem/Suggestion: </h4>
+				<input id="problem" class="w3-input w3-padding-16" type="text" name="problem" placeholder="No cargan los elementos" required style="width: 90%;">
+				<h4 class="w3-text-grey">Description: </h4>
+				<input id="descriptionProblem" class="w3-input w3-padding-16" type="textArea" name="descriptionProblem" placeholder="Al momento de cargar la página..." required style="width: 90%;">
+				<button class="w3-btn w3-dark-grey w3-margin" type="submit">Send</button>
+				<button class="w3-btn w3-dark-grey w3-margin" onclick="document.getElementById('modalComment').style.display='none'" type="reset">Cancel</button>
+			</form>
+			<footer class="w3-container w3-dark-grey">
+				<p>BPy productions</p>
+			</footer>
+		</div>
+	</div>
 
 	<!--Se agrega una barra de navegación en pantallas pequeñas-->
 	<div class="w3-top w3-hide-large w3-hide-medium" id="myNavbar">

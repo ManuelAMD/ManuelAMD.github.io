@@ -2,6 +2,11 @@ body, h1, h2, h3, h4, h5, h6{
 	font-family:"Monserrat", sans-serif
 }
 
+.taskName{
+	font-family: "Monserrat", sans-serif;
+	font-size: 20px;
+}
+
 .w3-row-padding img{
 	margin-bottom: 12px;
 }
@@ -19,4 +24,89 @@ body, h1, h2, h3, h4, h5, h6{
 	#main{
 		margin-left: 0;
 	}
+}
+
+pre{
+	margin-top: 0;
+	margin-bottom: 0;
+	color: black;
+}
+
+#container{
+	width: 100%;
+	margin: 0px;
+}
+
+#free{
+	display: flex;
+	height: 600px;
+	flex-direction: row;
+	width: 100%;
+	/*background-color: white;*/
+}
+
+#blocklyFree{
+	height: 100%;
+	width: 50%;
+	background-color: green;
+}
+
+#developFree{
+	display: flex;
+	height: 100%;
+	width: 50%;
+	flex-direction: column;
+}
+
+#codeAreaFree{
+	border: 1px solid #ccc;
+	height: 50%;
+	width: 100%;
+	background-color: white;
+	overflow: scroll;
+}
+
+#consoleAreaFree{
+	height: 50%;
+	width: 100%;
+	background-color: black;
+	color: lightgreen;
+	overflow: scroll;
+}
+
+#task{
+	display: flex;
+	height: 600px;
+	flex-direction: row;
+	width: 100%;
+	/*background-color: white;*/
+}
+
+#blocklyTask{
+	height: 100%;
+	width: 50%;
+	background-color: green;
+}
+
+#developTask{
+	display: flex;
+	height: 100%;
+	width: 50%;
+	flex-direction: column;
+}
+
+#codeAreaTask{
+	border: 1px solid #ccc;
+	height: 50%;
+	width: 100%;
+	background-color: white;
+	overflow: scroll;
+}
+
+#consoleAreaTask{
+	height: 50%;
+	width: 100%;
+	background-color: black;
+	color: lightgreen;
+	overflow: scroll;
 }
