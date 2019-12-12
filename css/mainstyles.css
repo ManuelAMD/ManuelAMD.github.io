@@ -16,6 +16,12 @@ body, h1, h2, h3, h4, h5, h6{
 	background: #222;
 }
 
+#my_camera{
+	width: 320px;
+	height: 240px;
+	border: 1px solid black;
+}
+
 #main{
 	margin-left: 120px;
 }

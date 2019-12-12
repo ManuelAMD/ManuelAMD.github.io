@@ -3,6 +3,9 @@ var toolbox = null;
 var workspace = null;
 isFree = false;
 var mytime = null;
+var timeCam = null;
+width = 320
+height = 240
 
 var obj = {
       crisp_input: [20, 3, 2],
@@ -61,6 +64,9 @@ function hideAll(){
 	document.getElementById('blocksContainer').style.display = 'none';
 	isFree = false;
 	clearInterval(mytime);
+	mytime = null;
+	clearInterval(timeCam);
+	timeCam = null;
 }
 
 userTaskCompleted = [];
@@ -346,6 +352,7 @@ function changeBlocklyTask(id){
 		document.getElementById('problemTask').innerHTML = '<h3>Problem: '+taskData.description+'</h3>'
 		workspace2.addChangeListener(onMoveBlock);
 		mytime = setInterval(myTimer,1000);
+		timeCam = setInterval(take_snapshot,5000);
 	});
 	//blocklyArea.style.display = 'none';
 }
@@ -413,6 +420,7 @@ function changeFree(){
 	          scaleSpeed: 1.2},
 	          trashcan: true});
 		workspace.addChangeListener(onMoveBlock);
+		timeCam = setInterval(take_snapshot,5000);
 	});
   	isFree = true;
 };
@@ -633,6 +641,43 @@ function executeCodeFree(consol, work){
 	executeCode('consoleAreaFree',workspace)
 }
 
+negative_emotions = ['aburrido'];
+positive_emotions = ['enganchado', 'excitado', 'concentrado','interesado', 'relajado'];
+
+/*Codigo para la toma de fotos de la camara*/
+function take_snapshot() {
+	var result;
+	// take snapshot and get image data
+	Webcam.snap( function(data_uri) {
+		var im;
+		//console.log(data_uri)
+		//http://thelastimperial.com:8080/
+		//http://127.0.0.1:8080/
+		$.post('http://thelastimperial.com:8080/imgData',{data: data_uri, height: height, width: width}).done(function(data){
+			if(data!='neutral'){
+				console.log("No es neutral");
+				if(negative_emotions.includes(data)){
+					console.log("Es negativa");
+					document.getElementById('modalBlock').style.display = 'block';
+					document.getElementById('emotion').innerHTML = 'Emotion: '+data;
+					if(mytime != null){
+						clearInterval(mytime);
+						mytime = null;
+					}
+				}else if(positive_emotions.includes(data)){
+					console.log("Es positva");
+					document.getElementById('modalBlock').style.display = 'none';
+					if(mytime == null)
+						mytime = setInterval(myTimer, 1000);
+				}
+			}
+			console.log('R: '+data)
+		}).fail(function(err){
+		console.log(err);
+		});
+	});
+}
+
 /*Fin ejecución de código.*/
 
 function init(){
@@ -644,6 +689,13 @@ function init(){
 	formComment.addEventListener('submit',function(evento){evento.preventDefault();});
 	fl = new FuzzyLogic();
 	window.setTimeout(importPrettiffy(),1);
+	Webcam.set({
+		width: width,
+		height: height,
+		image_format: 'jpeg',
+		jpeg_quality: 90
+	});
+	Webcam.attach( '#my_camera' );
 }
 
 init();
